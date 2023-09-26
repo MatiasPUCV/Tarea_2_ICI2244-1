@@ -62,5 +62,8 @@ point* PointFromStr(const char* str)
 
 void PointPrint(point* P)
 {
+    if (P == NULL)
+        return;
+
     printf("%s, %s, %s, %s", P->name, P->type, P->direction, P->schedule, P->description);
 }

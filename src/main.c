@@ -1,14 +1,22 @@
-#include "util.h"
 #include "point.h"
+#include "turist.h"
+#include "hashmap.h"
+#include "csv.h"
+
+#include "app.h"
 
 #include "stdlib.h"
 #include <stdio.h>
 
 int main()
 {
-    point* temp = PointFromStr("Museo del Arte,Museo,Calle Central 123,9:00-18:00,Una colección impresionante de arte contemporáneo\n");
+    HashMap* m1 = createMap(300);
+    HashMap* m2 = createMap(2);
 
-    PointPrint(temp);
+    ImportfromCsv("turistas.csv", 0, m1, m2);
 
-    free(temp);
+
+    //AppTuristByCountry(m1, "Italia");
+
+    printf("END\n");
 }
