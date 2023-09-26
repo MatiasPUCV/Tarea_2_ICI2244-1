@@ -11,12 +11,10 @@
 int main()
 {
     HashMap* m1 = createMap(300);
-    HashMap* m2 = createMap(2);
+    HashMap* m2 = createMap(200);
 
     ImportfromCsv("turistas.csv", 0, m1, m2);
 
-
-    //AppTuristByCountry(m1, "Italia");
-
-    printf("END\n");
+    AppTuristByCountry(m2, "Italia");
+    
 }

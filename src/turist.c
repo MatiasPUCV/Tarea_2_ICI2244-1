@@ -61,9 +61,7 @@ void TuristFromStr(const char* str, HashMap* map1, HashMap* map2)
         elementCount++;
     }
 
-    TuristPrint(temp);
-
-    insertMap(map1, temp->country, temp);
+    insertMap(map2, temp->country, temp);
 
 }
 

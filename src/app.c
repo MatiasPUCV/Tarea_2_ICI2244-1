@@ -1,7 +1,17 @@
 #include "app.h"
 
 
+
+
+void AppInitMaps()
+{
+
+}
+
+
 void AppTuristByCountry(HashMap* map, char* country)
 {
-    searchMap(map, "Italia");
+    Pair* temp = searchMap(map, "Italia");
+
+    TuristPrint(temp->value);
 }
