@@ -1,14 +1,18 @@
 #ifndef HASHMAP_H
 #define HASHMAP_H
 
-typedef struct HashMap HashMap;
-
 typedef struct Pair
 {
-    char * key;
-    void * value;
-
+    char* key;
+    void* value;
 } Pair;
+
+typedef struct HashMap {
+    Pair **buckets;
+    long size;
+    long capacity;
+    long current;
+} HashMap;
 
 HashMap* createMap(long capacity);
 

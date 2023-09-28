@@ -18,7 +18,7 @@ point* PointCreate()
     return result;
 }
 
-point* PointFromStr(const char* str)
+void PointFromStr(const char* str, HashMap* map1, HashMap* map2)
 {
     size_t size = strlen(str);
     size_t lastpos = 0;
@@ -35,8 +35,12 @@ point* PointFromStr(const char* str)
             continue;
 
         size_t strsize = i - lastpos - 1;
-        
-        // TODO: Revisar que ningun elemento no tenga más de 100 caracteres
+
+        if (strsize > 100)
+        {
+            Error("Str muy larga, ignornado datos...");
+            return;
+        }
 
         // crea la str que representa el elemento y lo puebla
         char* element = calloc(101, sizeof(char));
@@ -54,10 +58,21 @@ point* PointFromStr(const char* str)
     if (elementCount > 5)
     {
         Error("Datos insufiecientes para un Punto de Interes: %i", elementCount);
-        return NULL;
+        return;
     }
 
-    return temp;
+
+    insertMap(map1, temp->name, temp);
+    insertMap(map2, temp->type, temp);
+
+
+    long size70 = map1->capacity * 0.7;
+
+    if (map1->capacity >= size70)
+    {
+        enlarge(map1);
+        enlarge(map2);
+    }
 }
 
 void PointPrint(point* P)

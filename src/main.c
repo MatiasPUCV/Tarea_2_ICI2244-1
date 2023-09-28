@@ -1,20 +1,28 @@
-#include "point.h"
-#include "turist.h"
-#include "hashmap.h"
-#include "csv.h"
-
 #include "app.h"
 
-#include "stdlib.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "turist.h"
+#include "csv.h"
+
+
 
 int main()
 {
-    HashMap* m1 = createMap(300);
-    HashMap* m2 = createMap(200);
+    HashMap* map1 = createMap(100);
+    HashMap* map2 = createMap(100);
+    HashMap* map3 = createMap(100);
+    HashMap* map4 = createMap(100);
 
-    ImportfromCsv("turistas.csv", 0, m1, m2);
+    //ImportfromCsv("turistas.csv", Turist, arr[0], arr[1]);
 
-    AppTuristByCountry(m2, "Italia");
+    bool flag = true;
+    while (flag)
+    {
+        AppTick(&flag, map1, map2, map3, map4);
+    }
     
+    printf("END\n");
 }

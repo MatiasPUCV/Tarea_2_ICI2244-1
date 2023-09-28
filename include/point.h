@@ -14,7 +14,7 @@ typedef struct
 } point;
 
 point* PointCreate();
-point* PointFromStr(const char* str);
+void PointFromStr(const char* str, HashMap* map1, HashMap* map2);
 
 void PointPrint(point* P);
 

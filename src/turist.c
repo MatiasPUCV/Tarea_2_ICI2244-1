@@ -25,7 +25,7 @@ void TuristAddFavPlace(turist* T, const char* place)
     pushBack(T->favoritePlaces, &place);
 }
 
-void TuristFromStr(const char* str, HashMap* map1, HashMap* map2)
+turist* TuristFromStr(const char* str)
 {
     turist* temp = TuristCreate();
 
@@ -37,9 +37,7 @@ void TuristFromStr(const char* str, HashMap* map1, HashMap* map2)
 
     for(size_t i = 0; i < size; i++)
     {
-
         char c = str[i];
-        //printf("%i == %i || %i \n", i, size, c);
 
         if(c != ',' && c != '\n' && c != ';' && c != '\0')
             continue;
@@ -47,22 +45,21 @@ void TuristFromStr(const char* str, HashMap* map1, HashMap* map2)
         size_t strsize = i - lastpos - 1;
 
         // crea la str que representa el elemento y lo puebla
-        char* element = calloc(strsize, sizeof(char));
-        for (size_t j = 0; j < strsize + 1; j++)
+        char* element = calloc(strsize + 1, sizeof(char));
+        for (size_t j = 0; j < strsize; j++)
             element[j] = str[j + lastpos];
     
         // Añade el elemento al Turista
         if (elementCount <= 2)
             *ptrArr[elementCount] = element;
         else
-            pushFront(temp->favoritePlaces, element);
+            pushBack(temp->favoritePlaces, element);
 
         lastpos = i + 1;
         elementCount++;
     }
 
-    insertMap(map2, temp->country, temp);
-
+    return temp;
 }
 
 void TuristPrint(turist* T)
@@ -81,4 +78,17 @@ void TuristPrint(turist* T)
 
     printf("\n");
 
+}
+
+void TuristFree(turist* T)
+{
+    if (T == NULL)
+        return;
+
+    free(T->country);
+    free(T->favoritePlaces);
+    free(T->name);
+    free(T->pasaportNumber);
+
+    free(T);
 }

@@ -7,165 +7,171 @@
 #include <string.h>
 
 typedef struct HashMap HashMap;
-int enlarge_called = 0;
 
-struct HashMap {
-  Pair **buckets;
-  long size;     // cantidad de datos/pairs en la tabla
-  long capacity; // capacidad de la tabla
-  long current;  // indice del ultimo dato accedido
-};
+Pair *createPair(char *key, void *value)
+{
+    Pair *new = (Pair *)malloc(sizeof(Pair));
+    new->key = key;
+    new->value = value;
 
-Pair *createPair(char *key, void *value) {
-  Pair *new = (Pair *)malloc(sizeof(Pair));
-  new->key = key;
-  new->value = value;
-  return new;
+    return new;
 }
 
-long hash(char *key, long capacity) {
+long hash(char *key, long capacity)
+{
   unsigned long hash = 0;
+
   char *ptr;
-  for (ptr = key; *ptr != '\0'; ptr++) {
-    hash += hash * 32 + tolower(*ptr);
-  }
+    for (ptr = key; *ptr != '\0'; ptr++)
+      hash += hash * 32 + tolower(*ptr);
+  
   return hash % capacity;
 }
 
-int is_equal(void *key1, void *key2) {
-  if (key1 == NULL || key2 == NULL)
-    return 0;
-  if (strcmp((char *)key1, (char *)key2) == 0)
+int is_equal(void *key1, void *key2)
+{
+    if (key1 == NULL || key2 == NULL)
+      return 0;
+
+    if (strcmp((char *)key1, (char *)key2) == 0)
     return 1;
-  return 0;
+
+    return 0;
 }
 
 bool isEmptyPair(Pair *pair) {
-  if (pair != NULL) {
-    if (pair->key != NULL)
-      return true;
-  }
+  
+  if (pair == NULL)
+    return false;
+  
+  if (pair->key == NULL)
+    return false;
 
-  return false;
+  if (pair->value == NULL)
+    return false;
+
+  return true;
 }
 
-void insertMap(HashMap *map, char *key, void *value) {
-
-  if (map->size == map->capacity)
-    return;
-
-  long pos = hash(key, map->capacity);
-  long temp = pos;
-
-  while (isEmptyPair(map->buckets[pos]))
-    {
-      pos = (pos + 1) % map->capacity;
-      if (pos == temp)
+void insertMap(HashMap *map, char *key, void *value)
+{
+    if(map == NULL)
         return;
-    }
 
-  map->buckets[pos] = createPair(key, value);
+    if (map->size == map->capacity)
+      return;
 
-  map->size++;
-  map->current = pos;
-}
+    long pos = hash(key, map->capacity);
+    long temp = pos;
 
-void enlarge(HashMap *map) {
-  enlarge_called = 1; // no borrar (testing purposes)
-
-  Pair** old = map->buckets;
-  map->buckets = malloc(sizeof(Pair*) * map->capacity * 2);
-
-  long tempCap = map->capacity;
-  
-  map->capacity *= 2;
-  map->size = 0;
-
-  for (long int i = 0; i < tempCap; i++)
+    while (isEmptyPair(map->buckets[pos]))
     {
-      Pair* temp = old[i];
-      if(temp != NULL)
-        insertMap(map, temp->key, temp->value);
+        pos = (pos + 1) % map->capacity;
+        if (pos == temp)
+            return;
     }
 
-  free(old);
+    map->buckets[pos] = createPair(key, value);
+    map->current = pos;
+    printf("Inserted");
+
+    map->size = map->size + 1;
 }
 
-HashMap *createMap(long capacity) {
+void enlarge(HashMap *map)
+{
+    Pair** old = map->buckets;
+    map->buckets = malloc(sizeof(Pair*) * map->capacity * 2);
 
-  HashMap *hashMap = malloc(sizeof(HashMap));
+    long tempCap = map->capacity;
+  
+    map->capacity *= 2;
+    map->size = 0;
 
-  hashMap->buckets = malloc(capacity * sizeof(Pair*));
-  hashMap->capacity = capacity;
-  hashMap->current = -1;
-  hashMap->size = 0;
+    for (long int i = 0; i < tempCap; i++)
+    {
+        Pair* temp = old[i];
+        if(temp != NULL)
+            insertMap(map, temp->key, temp->value);
+    }
 
-  return hashMap;
+    free(old);
 }
 
-void eraseMap(HashMap *map, char *key) {
+HashMap *createMap(long capacity)
+{
+    HashMap *hashMap = malloc(sizeof(HashMap));
 
-  Pair* temp = searchMap(map, key);
-  if (temp != NULL)
-  {
-    temp->key = NULL;
-    map->size--;
-  }
+    hashMap->buckets = malloc(capacity * sizeof(Pair*));
+    hashMap->capacity = capacity;
+    hashMap->current = -1;
+    hashMap->size = 0;
+
+    return hashMap;
+}
+
+void eraseMap(HashMap *map, char *key)
+{
+    Pair* temp = searchMap(map, key);
+    if (temp != NULL)
+    {
+        temp->key = NULL;
+        map->size--;
+    }
   
 }
 
-bool searchHelper(Pair *pair, char *key) {
-  if (pair != NULL) {
-    return is_equal(pair->key, key);
-  }
+bool searchHelper(Pair *pair, char *key)
+{
+    if (pair != NULL)
+        return is_equal(pair->key, key);
 
-  return false;
+    return false;
 }
 
-Pair *searchMap(HashMap *map, char *key) {
+Pair *searchMap(HashMap *map, char *key)
+{
+    long pos = hash(key, map->capacity);
+    long temp = pos;
 
-  long pos = hash(key, map->capacity);
-  long temp = pos;
-
-  while (!searchHelper(map->buckets[pos], key))
+    while (!searchHelper(map->buckets[pos], key))
     {
-      pos = (pos + 1) % map->capacity;
-      if (pos == temp)
-        return NULL;
-      
+        pos = (pos + 1) % map->capacity;
+        if (pos == temp)
+            return NULL;
     }
 
-  map->current = pos;
+    map->current = pos;
 
-  return map->buckets[pos];
+    return map->buckets[pos];
 }
 
 Pair *firstMap(HashMap *map)
 {
-  long pos = map->current;
-  long temp = pos;
+    long pos = map->current;
+    long temp = pos;
 
-  while (!isEmptyPair(map->buckets[pos]))
+    while (!isEmptyPair(map->buckets[pos]))
     {
-      pos = (pos + 1) % map->capacity;
+        pos = (pos + 1) % map->capacity;
 
-      if (pos == temp)
-        return NULL;
+        if (pos == temp)
+            return NULL;
     }
 
-  map->current = pos;
+    map->current = pos;
   
-  return map->buckets[pos];
+    return map->buckets[pos];
 }
 
 Pair *nextMap(HashMap *map)
 {
-  long pos = map->current + 1;
+    long pos = map->current + 1;
 
-  if (pos >= map->capacity - 1)
-    return NULL;
+    if (pos >= map->capacity - 1)
+        return NULL;
 
-  map->current = pos;
+    map->current = pos;
   
-  return firstMap(map);
+    return firstMap(map);
 }
