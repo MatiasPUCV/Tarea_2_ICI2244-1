@@ -15,6 +15,7 @@ typedef struct
 
 turist* TuristCreate();
 turist* TuristFromStr(const char* str);
+void TuristCreateFromData(char* pasaportNumber, char* name, char* country, HashMap* map1, HashMap* map2);
 void TuristFree(turist* T);
 
 void TuristPrint(turist* T);

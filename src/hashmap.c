@@ -72,8 +72,8 @@ void insertMap(HashMap *map, char *key, void *value)
     }
 
     map->buckets[pos] = createPair(key, value);
+    printf("[Inserted]\n");
     map->current = pos;
-    printf("Inserted");
 
     map->size = map->size + 1;
 }

@@ -7,8 +7,6 @@
 #include "turist.h"
 #include "csv.h"
 
-
-
 int main()
 {
     HashMap* map1 = createMap(100);
@@ -23,6 +21,12 @@ int main()
     {
         AppTick(&flag, map1, map2, map3, map4);
     }
+
     
     printf("END\n");
+
+    free(map1);
+    free(map2);
+    free(map3);
+    free(map4);
 }

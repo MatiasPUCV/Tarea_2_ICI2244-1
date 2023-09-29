@@ -11,10 +11,8 @@ turist* TuristCreate()
     turist* result = malloc(sizeof(turist));
 
     result->pasaportNumber = NULL;
-
     result->name = NULL;
     result->country = NULL;
-
     result->favoritePlaces = createList();
 
     return result;
@@ -38,7 +36,6 @@ turist* TuristFromStr(const char* str)
     for(size_t i = 0; i < size; i++)
     {
         char c = str[i];
-
         if(c != ',' && c != '\n' && c != ';' && c != '\0')
             continue;
 
@@ -60,6 +57,20 @@ turist* TuristFromStr(const char* str)
     }
 
     return temp;
+}
+
+void TuristCreateFromData(char* pasaportNumber, char* name, char* country, HashMap* map1, HashMap* map2)
+{
+    turist* t = TuristCreate();
+    t->pasaportNumber = pasaportNumber;
+    t->name = name;
+    t->country = country;
+
+    insertMap(map1, t->pasaportNumber, t);
+    insertMap(map2, t->country, t);
+
+    ShouldEnlarge(map1);
+    ShouldEnlarge(map2);
 }
 
 void TuristPrint(turist* T)
