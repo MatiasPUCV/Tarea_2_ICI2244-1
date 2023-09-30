@@ -4,6 +4,8 @@
 #include "list.h"
 #include "hashmap.h"
 
+#include <stdio.h>
+
 typedef struct
 {
     char* pasaportNumber;
@@ -13,12 +15,17 @@ typedef struct
 
 } turist;
 
+// Crea un turista
 turist* TuristCreate();
+// Crea un turista desde una str
 turist* TuristFromStr(const char* str);
+// crea un turista con los datos
 void TuristCreateFromData(char* pasaportNumber, char* name, char* country, HashMap* map1, HashMap* map2);
 void TuristFree(turist* T);
 
 void TuristPrint(turist* T);
-void TuristAddFavPlace(turist* T, const char* place);
+void TuristPrintToStream(FILE* file, turist* T);
+
+void TuristAddFavPlace(turist* T, char* place);
 
 #endif

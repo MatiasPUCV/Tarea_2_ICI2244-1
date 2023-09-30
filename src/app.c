@@ -15,8 +15,8 @@ void AppRegisterTurist(HashMap* map1, HashMap* map2);
 void AppAddFavPlace(HashMap* map);
 void AppTuristByCountry(HashMap* map);
 void AppGetPointByType(HashMap* map);
-
 void AppImportCsv(HashMap* map1, HashMap* map2, HashMap* map3, HashMap* map4);
+void AppExportCsv(HashMap* map1, HashMap* map2);
 
 char* GetStrFromInput(const char* msg)
 {
@@ -36,6 +36,8 @@ char* GetStrFromInput(const char* msg)
 
 void AppTick(bool* close, HashMap* map1, HashMap* map2, HashMap* map3, HashMap* map4)
 {
+
+    // Interfaz de usuario
     printf("-----------------------------------\n");
     printf(" 1) Registrar punto de interés\n");
     printf(" 2) Mostrar datos de punto de interés\n");
@@ -48,7 +50,8 @@ void AppTick(bool* close, HashMap* map1, HashMap* map2, HashMap* map3, HashMap* 
     printf(" 9) Exportar puntos de interés y turistas a archivos CSV\n");
     printf(" 0) Cerrar\n");
     printf("-----------------------------------\n");
-
+    
+    // Consigue el numero de opción insertada
     int code;
     if (scanf("%i", &code) != 1)
     {
@@ -59,6 +62,7 @@ void AppTick(bool* close, HashMap* map1, HashMap* map2, HashMap* map3, HashMap* 
     // Limpia el buffer de entrada
     int c; while ((c = getchar()) != '\n' && c != EOF);
 
+    // Escoge la función a ejecutarn de la lista
     switch (code)
     {
     case 1:
@@ -82,13 +86,15 @@ void AppTick(bool* close, HashMap* map1, HashMap* map2, HashMap* map3, HashMap* 
     case 7:
       AppGetPointByType(map4);
       break;
-
     case 8:
         AppImportCsv(map1, map2, map3, map4);
         break;
+    case 9:
+        AppExportCsv(map1, map3);
+        break;
 
     default:
-      *close = false;
+        *close = false;
         break;
     }
 
@@ -96,6 +102,7 @@ void AppTick(bool* close, HashMap* map1, HashMap* map2, HashMap* map3, HashMap* 
 
 void AppRegisterPoint(HashMap* map1, HashMap* map2)
 {
+    // Consigue la información para un punto
     char* name        = GetStrFromInput("nombre del punto");
     char* type        = GetStrFromInput("tipo del punto");
     char* direction   = GetStrFromInput("direccíon del punto");
@@ -106,11 +113,13 @@ void AppRegisterPoint(HashMap* map1, HashMap* map2)
     {
         Error("No se pudo obtener datos");
     }
-  
+    
+    // Crea e inserta el punto en los mapas
     PointCreateFromData(name, type, direction, schedule, description, map1, map2);
 
     Success("\nNuevo Punto creado exitosamente!\n");
 
+    // libera memoria
     free(name); free(type); free(direction); free(schedule); free(description);
 }
 
@@ -144,6 +153,7 @@ void AppErasePoint(HashMap* map)
 
     eraseMap(map, name);
     free(name);
+    Success("\nEl punto ha sido elminado\n");
 }
 
 void AppRegisterTurist(HashMap* map1, HashMap* map2)
@@ -154,7 +164,7 @@ void AppRegisterTurist(HashMap* map1, HashMap* map2)
 
     TuristCreateFromData(pasaportNumber, name, country, map1, map2);
 
-    Success("Turista registrado exitosamente!");
+    Success("\nTurista registrado exitosamente!\n");
   
     free(pasaportNumber); free(name); free(country);
 }
@@ -173,47 +183,35 @@ void AppAddFavPlace(HashMap* map)
     char* fav = GetStrFromInput("lugar favorito");
 
     TuristAddFavPlace(pair->value, fav);
+    Success("\nLugar favorito añadido\n");
 }
 
 void AppTuristByCountry(HashMap* map)
 {
-    char* country = GetStrFromInput("país del turista");
+    char* type = GetStrFromInput("país de los turistas");
 
-    Pair* pair = searchMap(map, country);
+    Pair* pair = searchMap(map, type);
     if(pair == NULL || pair->key == NULL || pair->value == NULL)
     {
-      Error("Turista no encontrado");
+      Error("País no encontrado");
       return;
     }
 
-    TuristPrint(pair->value);
-    printf("\n");
+    turist* ptr = pair->value;
+    char* temp = ptr->country;
 
-    free(country);
-}
+    while(strcmp(temp, ptr->country) == 0)
+    {    
+        TuristPrint(ptr);
 
+        Pair* temp = nextMap(map);
+        if(temp == NULL || temp->key == NULL || temp->value == NULL)
+          return;
 
-void AppImportCsv(HashMap* map1, HashMap* map2, HashMap* map3, HashMap* map4)
-{
-    char* file = GetStrFromInput("nombre archivo");
-
-    int option;
-    printf("[0] turistas, [1] punto de interes: ");
-    if (scanf("%i", &option) != 1)
-    {
-        Error("No se pudo conseguir el numero");
-        return;
+        ptr =temp->value;
     }
-    printf("\n");
-    
-    if (option == 0)
-        ImportfromCsv(file, Turist, map1, map2);
-    else
-        ImportfromCsv(file, Point, map3, map4);
-    
-    free(file);
 
-    Success("\nArchivo importado!\n");
+    free(type);
 }
 
 void AppGetPointByType(HashMap* map)
@@ -236,11 +234,62 @@ void AppGetPointByType(HashMap* map)
         printf("\n");
 
         Pair* temp = nextMap(map);
-        if(pair == NULL || pair->key == NULL || pair->value == NULL)
+        if(temp == NULL || temp->key == NULL || temp->value == NULL)
           return;
 
-        ptr = (point*)temp->value;
+        ptr =temp->value;
     }
 
     free(type);
+}
+
+void AppImportCsv(HashMap* map1, HashMap* map2, HashMap* map3, HashMap* map4)
+{
+    char* file = GetStrFromInput("nombre archivo");
+
+    int option;
+    printf("[0] turistas, [1] punto de interes: ");
+    if (scanf("%i", &option) != 1)
+    {
+        Error("No se pudo conseguir el numero");
+        return;
+    }
+    printf("\n");
+  
+    int result;
+  
+    if (option == 0)
+        result = ImportfromCsv(file, Turist, map1, map2);
+    else
+        result = ImportfromCsv(file, Point, map3, map4);
+    
+    free(file);
+
+    if(result != -1)
+      Success("\nArchivo exportado!\n");
+    else
+      Error("No existe el archivo");
+}
+
+
+void AppExportCsv(HashMap* map1, HashMap* map2)
+{
+    char* file = GetStrFromInput("nombre archivo");
+
+    int option;
+    printf("[0] turistas, [1] punto de interes: ");
+    if (scanf("%i", &option) != 1)
+    {
+        Error("No se pudo conseguir el numero");
+        return;
+    }
+    printf("\n");
+    
+    if (option == 0)
+        ExportToCsv(file, Turist, map1);
+    else
+        ExportToCsv(file, Point, map2);
+    
+    free(file);
+    Success("\nArchivo exportado\n");
 }

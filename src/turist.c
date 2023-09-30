@@ -1,8 +1,6 @@
 #include "turist.h"
-
 #include "util.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -18,9 +16,9 @@ turist* TuristCreate()
     return result;
 }
 
-void TuristAddFavPlace(turist* T, const char* place)
+void TuristAddFavPlace(turist* T, char* place)
 {
-    pushBack(T->favoritePlaces, &place);
+    pushBack(T->favoritePlaces, place);
 }
 
 turist* TuristFromStr(const char* str)
@@ -42,8 +40,8 @@ turist* TuristFromStr(const char* str)
         size_t strsize = i - lastpos - 1;
 
         // crea la str que representa el elemento y lo puebla
-        char* element = calloc(strsize + 1, sizeof(char));
-        for (size_t j = 0; j < strsize; j++)
+        char* element = calloc(101, sizeof(char));
+        for (size_t j = 0; j < strsize + 1; j++)
             element[j] = str[j + lastpos];
     
         // Añade el elemento al Turista
@@ -102,4 +100,21 @@ void TuristFree(turist* T)
     free(T->pasaportNumber);
 
     free(T);
+}
+
+void TuristPrintToStream(FILE* file, turist* T)
+{
+    if (T == NULL)
+        return;
+
+    fprintf(file, "%s,%s,%s", T->pasaportNumber, T->name, T->country);
+
+    char* data = firstList(T->favoritePlaces);
+    while (data != NULL)
+    {
+        fprintf(file, ";%s", data);
+        data = nextList(T->favoritePlaces);
+    }
+
+    fprintf(file, "\n");
 }

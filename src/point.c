@@ -1,7 +1,6 @@
 #include "point.h"
 #include "util.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -28,6 +27,7 @@ point* PointFromStr(const char* str)
 
     char** ptrArr[5] = {&temp->name, &temp->type, &temp->direction, &temp->schedule, &temp->description};
 
+    // Trozea la STR en varios elemento que conformaran el mapa
     for(size_t i = 0; i < size; i++)
     {
         char c = str[i];
@@ -74,7 +74,8 @@ void PointCreateFromData(char* name, char* type, char* direction, char* schedule
 
     insertMap(map1, temp->name, temp);
     insertMap(map2, temp->type, temp);
-
+    
+    // Revisa si los mapas tienen que aumentar de tamaño
     ShouldEnlarge(map1);
     ShouldEnlarge(map2);
 }
@@ -85,4 +86,12 @@ void PointPrint(point* P)
         return;
 
     printf("%s, %s, %s, %s, %s", P->name, P->type, P->direction, P->schedule, P->description);
+}
+
+void PointPrintToStream(FILE* file, point* P)
+{
+    if (P == NULL)
+        return;
+
+    fprintf(file,"%s,%s,%s,%s,%s\n", P->name, P->type, P->direction, P->schedule, P->description);
 }

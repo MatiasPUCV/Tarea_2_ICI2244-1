@@ -1,0 +1,1 @@
+gcc -Iinclude -o Tarea1 src/main.c src/app.c src/csv.c src/hashmap.c src/list.c src/point.c src/turist.c src/util.c
