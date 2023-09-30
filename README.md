@@ -49,3 +49,16 @@ La aplicación exporta todos los puntos de interés o turistas, a un archivo CSV
 **0. Cerrar**:
 Cierra la aplicación.
 
+## Errores conocidos:
+
+**1.** La implementación del hashmap, originalmente implementado en replit, falla fuera de este, resultando en errores de segmentación. insertMap() es la función la cual teorizó que da los problemas.
+
+**2.** A la hora de obtener la información de los CSV es posible que se omitan elementos.
+
+**3.** Al buscar elementos creados con la opción 1 y 4, la aplicación no puede encontrarlos.
+
+**4.** A la hora de insertar números en la interfaz y en las opciones 8 y 9. Si se insertan al que no sea un número, especialmente si hay espacios, puede llevar a la aplicación a un bucle infinito.
+
+**5.** La aplicación hace un mal uso de memoria y no libera la memoria de los mapas, esto no se ha hecho debido a problemas con la implementación del hashmap.
+
+
