@@ -28,7 +28,6 @@ int ImportfromCsv(const char* filename, dataType type, HashMap* map1, HashMap* m
         if(type == Turist)
         {
             turist* t = TuristFromStr(buffer);
-            TuristPrint(t);
 
             insertMap(map1, t->pasaportNumber, t);
             insertMap(map2, t->country, t);
@@ -36,15 +35,12 @@ int ImportfromCsv(const char* filename, dataType type, HashMap* map1, HashMap* m
         else if(type == Point)
         {
             point* p = PointFromStr(buffer);
-            PointPrint(p);
-
             insertMap(map1, p->name, p);
             insertMap(map2, p->type, p);
         }
 
         ShouldEnlarge(map1);
         ShouldEnlarge(map2);
-
     }    
 
     fclose(file);

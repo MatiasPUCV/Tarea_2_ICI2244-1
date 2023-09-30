@@ -85,7 +85,7 @@ void PointPrint(point* P)
     if (P == NULL)
         return;
 
-    printf("%s, %s, %s, %s, %s", P->name, P->type, P->direction, P->schedule, P->description);
+    printf("%s, %s, %s, %s, %s\n", P->name, P->type, P->direction, P->schedule, P->description);
 }
 
 void PointPrintToStream(FILE* file, point* P)
