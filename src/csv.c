@@ -67,6 +67,7 @@ void ExportToCsv(char* filename, dataType type, HashMap* map)
         return;
     }
 
+    // Recorre el mapa e imprime los datos en el archivo
     long size = map->capacity;
     for (long l = 0; l < size; l++)
     {   

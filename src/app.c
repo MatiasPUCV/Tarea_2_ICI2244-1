@@ -18,6 +18,7 @@ void AppGetPointByType(HashMap* map);
 void AppImportCsv(HashMap* map1, HashMap* map2, HashMap* map3, HashMap* map4);
 void AppExportCsv(HashMap* map1, HashMap* map2);
 
+// Función para conseguir un STR con espacios del input del usuario
 char* GetStrFromInput(const char* msg)
 {
     printf("\x1b[38;2;193;159;36mInserte %s:\x1b[0m ", msg);
@@ -109,9 +110,11 @@ void AppRegisterPoint(HashMap* map1, HashMap* map2)
     char* schedule    = GetStrFromInput("horario del punto");
     char* description = GetStrFromInput("despripción del punto");
 
+    // Revisa que los datos sean validos
     if(name == NULL || type == NULL || direction == NULL || schedule == NULL || description == NULL)
     {
         Error("No se pudo obtener datos");
+        return;
     }
     
     // Crea e inserta el punto en los mapas
@@ -127,6 +130,7 @@ void AppGetPointData(HashMap* map)
 {
     char* name = GetStrFromInput("nombre del punto");
 
+    // revisa que la key exista
     Pair* pair = searchMap(map, name);
     if(pair == NULL || pair->key == NULL || pair->value == NULL)
     {
@@ -144,6 +148,7 @@ void AppErasePoint(HashMap* map)
 {
     char* name = GetStrFromInput("nombre del punto");
 
+    // revisa que la key exista
     Pair* pair = searchMap(map, name);
     if(pair == NULL || pair->key == NULL || pair->value == NULL)
     {
@@ -151,7 +156,9 @@ void AppErasePoint(HashMap* map)
       return;
     }
 
+    // Elimina el elemento
     eraseMap(map, name);
+
     free(name);
     Success("\nEl punto ha sido elminado\n");
 }
@@ -161,6 +168,13 @@ void AppRegisterTurist(HashMap* map1, HashMap* map2)
     char* pasaportNumber = GetStrFromInput("numero de pasaporte");
     char* name           = GetStrFromInput("nombre");
     char* country        = GetStrFromInput("país");
+
+    // Revisa que los datos sean validos
+    if(pasaportNumber == NULL || name == NULL || country == NULL)
+    {
+        Error("No se pudo obtener datos");
+        return;
+    }
 
     TuristCreateFromData(pasaportNumber, name, country, map1, map2);
 
@@ -173,6 +187,7 @@ void AppAddFavPlace(HashMap* map)
 {
     char* pass = GetStrFromInput("numero de pasaporte");
 
+    // revisa que la key exista
     Pair* pair = searchMap(map, pass);
     if(pair == NULL || pair->key == NULL || pair->value == NULL)
     {
@@ -200,6 +215,7 @@ void AppTuristByCountry(HashMap* map)
     turist* ptr = pair->value;
     char* temp = ptr->country;
 
+    // Recorre el mapa hasta que el pais cambie
     while(strcmp(temp, ptr->country) == 0)
     {    
         TuristPrint(ptr);
@@ -217,7 +233,7 @@ void AppTuristByCountry(HashMap* map)
 void AppGetPointByType(HashMap* map)
 {
     char* type = GetStrFromInput("tipo de los puntos");
-
+    
     Pair* pair = searchMap(map, type);
     if(pair == NULL || pair->key == NULL || pair->value == NULL)
     {
@@ -228,6 +244,7 @@ void AppGetPointByType(HashMap* map)
     point* ptr = pair->value;
     char* temp = ptr->type;
 
+    // Recorre el mapa hasta que el tipo cambie
     while(ptr != NULL || strcmp(temp, ptr->type) == 0)
     {    
         PointPrint(ptr);
