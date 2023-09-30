@@ -1,6 +1,14 @@
 # Tarea_2_ICI2244-1
 ![265290404-697cadcf-5b6e-4fd4-9301-baa3883555c3](https://github.com/MatiasPUCV/Tarea_2_ICI2244-1/assets/142541831/f7e25f5f-2a2a-4568-83e9-b1b9e08cd79a)
 
+## Compilación:
+
+Ejecute en el directorio:
+
+`gcc -Iinclude -o Tarea1 src/main.c src/app.c src/csv.c src/hashmap.c src/list.c src/point.c src/turist.c src/util.c`
+
+Tambien puede usar `compile.bat` o usar cmake.
+
 ## Información de uso:
 **1. Registrar punto de interés** <char* nombre, char* tipo, char* dirección, char* horario, char* descripción>:
 
