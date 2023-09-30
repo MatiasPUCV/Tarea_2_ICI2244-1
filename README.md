@@ -57,7 +57,7 @@ Cierra la aplicación.
 
 **3.** Al buscar elementos creados con la opción 1 y 4, la aplicación no puede encontrarlos.
 
-**4.** A la hora de insertar números en la interfaz y en las opciones 8 y 9. Si se insertan al que no sea un número, especialmente si hay espacios, puede llevar a la aplicación a un bucle infinito.
+**4.** A la hora de insertar números en la interfaz y en las opciones 8 y 9. Si se insertan al que no sea un número, especialmente si hay espacios, puede llevar a la aplicación a un bucle infinito. Esto a falta de una función más eleborada para obtener un digito.
 
 **5.** La aplicación hace un mal uso de memoria y no libera la memoria de los mapas, esto no se ha hecho debido a problemas con la implementación del hashmap.
 
